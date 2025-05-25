@@ -1,6 +1,7 @@
 package com.diplom.toloka_bee_backend.controller;
 
 import com.diplom.toloka_bee_backend.model.ContactInfoModel;
+import com.diplom.toloka_bee_backend.model.dto.ContactInfoDTO;
 import com.diplom.toloka_bee_backend.service.ContactInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +15,14 @@ public class ContactController {
 
 
     @PostMapping("/save")
-    public ContactInfoModel saveContact(@RequestBody ContactInfoModel model) {
-        return contactInfoService.saveContactInfo(model);
+    public ContactInfoModel saveContact(@RequestBody ContactInfoDTO model) {
+        return contactInfoService.saveContactInfo(model.toContactInfoModel());
     }
 
 
     @PostMapping("/update")
-    public void updateContact(@RequestBody ContactInfoModel model) {
-        contactInfoService.updateContactInfo(model);
+    public void updateContact(@RequestBody ContactInfoDTO model) {
+        contactInfoService.updateContactInfo(model.toContactInfoModel());
     }
 
 

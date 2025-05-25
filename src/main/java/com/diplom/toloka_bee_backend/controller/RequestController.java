@@ -1,9 +1,10 @@
 package com.diplom.toloka_bee_backend.controller;
 
-import com.diplom.toloka_bee_backend.model.LocationModel;
+import com.diplom.toloka_bee_backend.model.dto.LocationDTO;
 import com.diplom.toloka_bee_backend.model.RequestModel;
 import com.diplom.toloka_bee_backend.model.VolunteerWorkModel;
 import com.diplom.toloka_bee_backend.model.dto.ChangeRequestStatusDTO;
+import com.diplom.toloka_bee_backend.model.dto.RequestDTO;
 import com.diplom.toloka_bee_backend.model.request_personalization.UserProfileStats;
 import com.diplom.toloka_bee_backend.service.MongoRequestsService;
 import com.diplom.toloka_bee_backend.service.VolunteerWorkService;
@@ -24,13 +25,13 @@ public class RequestController {
     private VolunteerWorkService volunteerWorkService;
 
     @PostMapping("/save")
-    public RequestModel saveRequest(@RequestBody RequestModel requestModel) {
-        return mongoRequestsService.saveRequest(requestModel);
+    public RequestModel saveRequest(@RequestBody RequestDTO requestModel) {
+        return mongoRequestsService.saveRequest(requestModel.toModel());
     }
 
     @PostMapping("/update")
-    public void updateRequest(@RequestBody RequestModel requestModel) {
-        mongoRequestsService.updateRequest(requestModel);
+    public void updateRequest(@RequestBody RequestDTO requestModel) {
+        mongoRequestsService.updateRequest(requestModel.toModel());
     }
 
     @PutMapping("update-status")
@@ -40,15 +41,15 @@ public class RequestController {
 
 
     @PostMapping("/get-all")
-    public List<RequestModel> getRequests(@RequestBody LocationModel locationModel) {
+    public List<RequestModel> getRequests(@RequestBody LocationDTO locationModel) {
         return mongoRequestsService.getAllRequests(locationModel);
     }
 
     @PostMapping("/get-personalized")
-    public List<RequestModel> getPersonalizedRequests(@RequestBody LocationModel locationModel) {
-        final List<VolunteerWorkModel> userWorkHistory = volunteerWorkService.getWorksByVolunteer(locationModel.getUserId());
+    public List<RequestModel> getPersonalizedRequests(@RequestBody LocationDTO locationDTO) {
+        final List<VolunteerWorkModel> userWorkHistory = volunteerWorkService.getWorksByVolunteer(locationDTO.getUserId());
         final List<RequestModel> workHistoryRequests = userWorkHistory.stream().map(e -> mongoRequestsService.getRequestById(e.getRequestId())).filter(Objects::nonNull).toList();
-        return mongoRequestsService.getPersonalizedRequests(locationModel, UserProfileStats.fromWorkHistory(workHistoryRequests), locationModel.getRadius(), userWorkHistory);
+        return mongoRequestsService.getPersonalizedRequests(locationDTO, UserProfileStats.fromWorkHistory(workHistoryRequests), locationDTO.getRadius(), userWorkHistory);
     }
 
     @GetMapping("/get/{id}")

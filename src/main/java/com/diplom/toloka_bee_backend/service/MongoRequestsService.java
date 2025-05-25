@@ -1,6 +1,6 @@
 package com.diplom.toloka_bee_backend.service;
 
-import com.diplom.toloka_bee_backend.model.LocationModel;
+import com.diplom.toloka_bee_backend.model.dto.LocationDTO;
 import com.diplom.toloka_bee_backend.model.RequestModel;
 import com.diplom.toloka_bee_backend.model.VolunteerWorkModel;
 import com.diplom.toloka_bee_backend.model.request_personalization.RequestRankingEngine;
@@ -25,12 +25,12 @@ public class MongoRequestsService {
         return mongoRequestsRepository.save(request);
     }
 
-    public List<RequestModel> getAllRequests(LocationModel locationModel) {
-        if (locationModel.isOnlyRemote()) {
+    public List<RequestModel> getAllRequests(LocationDTO locationDTO) {
+        if (locationDTO.isOnlyRemote()) {
             return mongoRequestsRepository.findByIsRemote(true);
         } else {
-            Point userLocation = new Point(locationModel.getLongitude(), locationModel.getLatitude());
-            Distance distance = new Distance(locationModel.getRadius(), Metrics.KILOMETERS);
+            Point userLocation = new Point(locationDTO.getLongitude(), locationDTO.getLatitude());
+            Distance distance = new Distance(locationDTO.getRadius(), Metrics.KILOMETERS);
             List<RequestModel> nearby = mongoRequestsRepository.findByLocationNear(userLocation, distance);
             List<RequestModel> remote = mongoRequestsRepository.findByIsRemote(true);
             Map<String, RequestModel> uniqueById = new LinkedHashMap<>();
@@ -40,13 +40,13 @@ public class MongoRequestsService {
             ArrayList<RequestModel> results = new ArrayList<>(uniqueById.values());
 
             return results.stream().filter(request -> request.getDeadline().after(new Date()))
-                    .filter(result -> !Objects.equals(result.getUserId().toLowerCase(), locationModel.getUserId().toLowerCase()))
+                    .filter(result -> !Objects.equals(result.getUserId().toLowerCase(), locationDTO.getUserId().toLowerCase()))
                     .toList();
         }
     }
 
-    public List<RequestModel> getPersonalizedRequests(LocationModel locationModel, UserProfileStats stats, double distanceKm, List<VolunteerWorkModel> volunteeringHistory) {
-        List<RequestModel> all = getAllRequests(locationModel);
+    public List<RequestModel> getPersonalizedRequests(LocationDTO locationDTO, UserProfileStats stats, double distanceKm, List<VolunteerWorkModel> volunteeringHistory) {
+        List<RequestModel> all = getAllRequests(locationDTO);
         List<String> helpingInProgress = volunteeringHistory.stream().map(VolunteerWorkModel::getRequestId).toList();
         List<RequestModel> notHelped = all.stream()
                 .filter(request -> !helpingInProgress.contains(request.getId()))
