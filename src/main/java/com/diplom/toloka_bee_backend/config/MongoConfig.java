@@ -10,9 +10,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import java.util.logging.Logger;
+
 
 @Configuration
 public class MongoConfig {
+
+    private static final Logger LOGGER = Logger.getLogger(MongoConfig.class.getName());
+
     private static final Dotenv dotenv = Dotenv.load();
 
     public static void main(String[] args) {
@@ -32,7 +37,7 @@ public class MongoConfig {
             try {
                 MongoDatabase database = mongoClient.getDatabase("admin");
                 database.runCommand(new Document("ping", 1));
-                System.out.println("Pinged your deployment. You successfully connected to MongoDB!");
+                LOGGER.info("Pinged your deployment. You successfully connected to MongoDB!");
             } catch (MongoException e) {
                //ignore
             }

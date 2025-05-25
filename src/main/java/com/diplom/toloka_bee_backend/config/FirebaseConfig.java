@@ -39,7 +39,6 @@ public class FirebaseConfig {
                 }
             }
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Failed to initialize Firebase: " + e.getMessage(), e);
             throw new IllegalStateException("Could not initialize Firebase", e);
         }
     }

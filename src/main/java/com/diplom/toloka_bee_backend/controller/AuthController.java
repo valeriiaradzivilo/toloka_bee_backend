@@ -72,7 +72,7 @@ public class AuthController {
             return UserData.fromMongoUserData(mongoUser, "", "");
 
         }
-        System.out.println(data);
+
         throw new Exception("Invalid credentials");
 
     }
