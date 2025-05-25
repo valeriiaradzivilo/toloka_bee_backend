@@ -1,0 +1,11 @@
+org/example/diplom_back/controller/LocationController.class
+org/example/diplom_back/config/FirebaseConfig.class
+com/diplom/zip_way_backend/repository/VolunteerRepository.class
+com/diplom/zip_way_backend/controller/LocationController.class
+com/diplom/zip_way_backend/config/SecurityConfig.class
+com/diplom/zip_way_backend/model/Volunteer.class
+com/diplom/zip_way_backend/service/LocationService.class
+com/diplom/zip_way_backend/ZipWayBackendApplication.class
+org/example/diplom_back/config/SecurityConfig.class
+org/example/diplom_back/DiplomBackApplication.class
+com/diplom/zip_way_backend/config/FirebaseConfig.class
