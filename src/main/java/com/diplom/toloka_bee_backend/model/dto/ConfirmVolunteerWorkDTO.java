@@ -11,4 +11,8 @@ import lombok.NoArgsConstructor;
 public class ConfirmVolunteerWorkDTO {
     @NotBlank
     private String workId;
+    @NotBlank
+    private String requestId;
+    @NotBlank
+    private String status;
 }

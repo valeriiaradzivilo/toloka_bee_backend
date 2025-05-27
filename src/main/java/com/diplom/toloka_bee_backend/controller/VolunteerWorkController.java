@@ -3,6 +3,7 @@ package com.diplom.toloka_bee_backend.controller;
 import com.diplom.toloka_bee_backend.model.VolunteerWorkModel;
 import com.diplom.toloka_bee_backend.model.dto.ConfirmVolunteerWorkDTO;
 import com.diplom.toloka_bee_backend.model.dto.StartVolunteerWorkDTO;
+import com.diplom.toloka_bee_backend.service.MongoRequestsService;
 import com.diplom.toloka_bee_backend.service.VolunteerWorkService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -18,6 +19,9 @@ public class VolunteerWorkController {
 
     @Autowired
     private VolunteerWorkService volunteerWorkService;
+
+    @Autowired
+    private MongoRequestsService requestService;
 
 
     @PostMapping("/start")
@@ -36,6 +40,7 @@ public class VolunteerWorkController {
     @Operation(summary = "Requester confirms the work")
     public void confirmByRequester(@RequestBody @Valid ConfirmVolunteerWorkDTO dto) {
         volunteerWorkService.confirmByRequester(dto.getWorkId());
+        requestService.updateRequestStatus(dto.getRequestId(), dto.getStatus());
     }
 
     @GetMapping("/volunteer/{volunteerId}")

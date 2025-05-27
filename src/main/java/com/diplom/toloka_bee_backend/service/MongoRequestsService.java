@@ -27,7 +27,10 @@ public class MongoRequestsService {
 
     public List<RequestModel> getAllRequests(LocationDTO locationDTO) {
         if (locationDTO.isOnlyRemote()) {
-            return mongoRequestsRepository.findByIsRemote(true);
+            return mongoRequestsRepository.findByIsRemote(true).stream()
+                    .filter(request -> request.getDeadline().after(new Date()))
+                    .filter(result -> !Objects.equals(result.getUserId().toLowerCase(), locationDTO.getUserId().toLowerCase()))
+                    .toList();
         } else {
             Point userLocation = new Point(locationDTO.getLongitude(), locationDTO.getLatitude());
             Distance distance = new Distance(locationDTO.getRadius(), Metrics.KILOMETERS);
@@ -39,7 +42,8 @@ public class MongoRequestsService {
 
             ArrayList<RequestModel> results = new ArrayList<>(uniqueById.values());
 
-            return results.stream().filter(request -> request.getDeadline().after(new Date()))
+            return results.stream()
+                    .filter(request -> request.getDeadline().after(new Date()))
                     .filter(result -> !Objects.equals(result.getUserId().toLowerCase(), locationDTO.getUserId().toLowerCase()))
                     .toList();
         }
@@ -48,9 +52,7 @@ public class MongoRequestsService {
     public List<RequestModel> getPersonalizedRequests(LocationDTO locationDTO, UserProfileStats stats, double distanceKm, List<VolunteerWorkModel> volunteeringHistory) {
         List<RequestModel> all = getAllRequests(locationDTO);
         List<String> helpingInProgress = volunteeringHistory.stream().map(VolunteerWorkModel::getRequestId).toList();
-        List<RequestModel> notHelped = all.stream()
-                .filter(request -> !helpingInProgress.contains(request.getId()))
-                .toList();
+        List<RequestModel> notHelped = all.stream().filter(request -> !helpingInProgress.contains(request.getId())).toList();
 
         RequestRankingEngine engine = new RequestRankingEngine();
         return engine.rankRequests(notHelped, stats, distanceKm);
@@ -74,9 +76,7 @@ public class MongoRequestsService {
     }
 
     public List<RequestModel> getRequestsByIds(List<String> ids) {
-        return mongoRequestsRepository.findAllById(ids).stream()
-                .sorted(Comparator.comparing(RequestModel::getStatus))
-                .collect(Collectors.toList());
+        return mongoRequestsRepository.findAllById(ids).stream().sorted(Comparator.comparing(RequestModel::getStatus)).collect(Collectors.toList());
     }
 
     public void deleteAllByUserId(String userId) {
@@ -95,9 +95,7 @@ public class MongoRequestsService {
     public long getCountOfTodayRequestsByUserId(String id) {
         Date today = new Date();
 
-        return mongoRequestsRepository.findAll().stream()
-                .filter(request -> request.getUserId().equals(id) && request.getCreatedAt().after(today))
-                .count();
+        return mongoRequestsRepository.findAll().stream().filter(request -> request.getUserId().equals(id) && request.getCreatedAt().after(today)).count();
     }
 
     public void updateRequestStatus(String id, String status) {

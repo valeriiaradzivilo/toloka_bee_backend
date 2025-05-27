@@ -2,13 +2,11 @@ package com.diplom.toloka_bee_backend.model.dto;
 
 
 import com.diplom.toloka_bee_backend.model.LocationSubscriptionModel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class LocationSubscriptionDTO {

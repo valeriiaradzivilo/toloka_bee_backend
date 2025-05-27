@@ -2,10 +2,7 @@ package com.diplom.toloka_bee_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
@@ -19,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class RequestModel {
     private String id;
+    @NonNull
     private String userId;
     private String status;
     private Date deadline;

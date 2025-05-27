@@ -2,8 +2,8 @@ package com.diplom.toloka_bee_backend.model.request_personalization;
 
 import com.diplom.toloka_bee_backend.model.RequestModel;
 
-
 public class RequestScoringService {
+
 
     public int computeScore(RequestModel request, UserProfileStats stats, double distanceKm) {
         int score = 0;
@@ -25,7 +25,6 @@ public class RequestScoringService {
         if (stats.getPreferredUsersToHelp() != null && !stats.getPreferredUsersToHelp().isEmpty() && request.getUserId() != null) {
             if (stats.getPreferredUsersToHelp().contains(request.getUserId())) score += 5;
         }
-
 
         long timeUntilDeadline = request.getDeadline().getTime() - System.currentTimeMillis();
         if (timeUntilDeadline < 3600000) score += 5;
