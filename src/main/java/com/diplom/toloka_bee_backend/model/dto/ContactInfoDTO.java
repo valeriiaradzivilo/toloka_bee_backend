@@ -16,15 +16,10 @@ public class ContactInfoDTO {
     private String userId;
 
     private ContactMethod preferredMethod;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String phone;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String email;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String viber;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String telegram;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String whatsapp;
 
 
