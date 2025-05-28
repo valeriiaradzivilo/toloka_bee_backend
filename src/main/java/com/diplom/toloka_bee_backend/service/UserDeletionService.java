@@ -31,7 +31,6 @@ public class UserDeletionService {
     public void blockUser(String userId) {
         volunteerWorkService.deleteByUserId(userId);
         mongoRequestsService.closeAllByUserId(userId);
-        contactService.deleteByUserId(userId);
         complaintService.deleteComplaintsByUserId(userId);
         locationSubscriptionService.deleteByUserId(userId);
     }
