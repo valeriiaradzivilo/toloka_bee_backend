@@ -2,7 +2,6 @@ package com.diplom.toloka_bee_backend.model.dto;
 
 import com.diplom.toloka_bee_backend.model.ContactInfoModel;
 import com.diplom.toloka_bee_backend.model.ContactMethod;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
