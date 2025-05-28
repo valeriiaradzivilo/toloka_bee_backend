@@ -8,3 +8,6 @@ WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
+
+#docker build -t toloka-backend . && docker run -d -p 8080:8080 --env-file .env --name toloka-container toloka-backend

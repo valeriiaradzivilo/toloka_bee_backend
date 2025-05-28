@@ -1,54 +1,21 @@
 package com.diplom.toloka_bee_backend.config;
 
-import com.mongodb.*;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
-import io.github.cdimascio.dotenv.Dotenv;
-import org.bson.Document;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
-import java.util.logging.Logger;
-
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 
 @Configuration
 public class MongoConfig {
 
-    private static final Logger LOGGER = Logger.getLogger(MongoConfig.class.getName());
-
-    private static final Dotenv dotenv = Dotenv.load();
-
-    public static void main(String[] args) {
-        String connectionString = dotenv.get("MONGODB_URI_TOLOKA");
-
-        ServerApi serverApi = ServerApi.builder()
-                .version(ServerApiVersion.V1)
-                .build();
-
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(connectionString))
-                .serverApi(serverApi)
-                .build();
-
-
-        try (MongoClient mongoClient = MongoClients.create(settings)) {
-            try {
-                MongoDatabase database = mongoClient.getDatabase("admin");
-                database.runCommand(new Document("ping", 1));
-                LOGGER.info("Pinged your deployment. You successfully connected to MongoDB!");
-            } catch (MongoException e) {
-               //ignore
-            }
-        }
-    }
-
+    @Value("${spring.data.mongodb.uri}")
+    private String mongoUri;
 
     @Bean
     public MongoClient mongoClient() {
-        String uri = dotenv.get("MONGODB_URI_TOLOKA");
-        return MongoClients.create(uri);
+        return MongoClients.create(mongoUri);
     }
 
     @Bean

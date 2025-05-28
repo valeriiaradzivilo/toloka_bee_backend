@@ -1,6 +1,5 @@
 package com.diplom.toloka_bee_backend;
 
-import com.diplom.toloka_bee_backend.config.MongoConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
@@ -16,7 +15,6 @@ public class TolokaBeeBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TolokaBeeBackendApplication.class, args);
-        MongoConfig.main(args);
     }
 
 }

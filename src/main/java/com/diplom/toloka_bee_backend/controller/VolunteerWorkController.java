@@ -1,6 +1,8 @@
 package com.diplom.toloka_bee_backend.controller;
 
+import com.diplom.toloka_bee_backend.model.RequestModel;
 import com.diplom.toloka_bee_backend.model.VolunteerWorkModel;
+import com.diplom.toloka_bee_backend.model.dto.CancelHelpingDTO;
 import com.diplom.toloka_bee_backend.model.dto.ConfirmVolunteerWorkDTO;
 import com.diplom.toloka_bee_backend.model.dto.StartVolunteerWorkDTO;
 import com.diplom.toloka_bee_backend.service.MongoRequestsService;
@@ -8,6 +10,7 @@ import com.diplom.toloka_bee_backend.service.VolunteerWorkService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,9 +70,17 @@ public class VolunteerWorkController {
         return volunteerWorkService.getWorkById(id);
     }
 
-    @DeleteMapping("/cancel/{workId}")
+    @PostMapping("/cancel")
     @Operation(summary = "Cancel a work by work id")
-    public void cancelWork(@PathVariable String workId) {
-        volunteerWorkService.cancelWork(workId);
+    public void cancelWork(@RequestBody @Valid CancelHelpingDTO dto) {
+
+        final VolunteerWorkModel work = volunteerWorkService.getWorkById(dto.getWorkId()).orElseThrow(() -> new RuntimeException("Work not found"));
+        RequestModel request = requestService.getRequestById(work.getRequestId());
+        if (request != null) {
+            request.setStatus(dto.getNewStatus());
+            requestService.updateRequest(request);
+        }
+
+        volunteerWorkService.cancelWork(dto.getWorkId());
     }
 }
