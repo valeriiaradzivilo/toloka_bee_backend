@@ -44,16 +44,5 @@ public class BlockUserService {
         mongoUserRepository.save(user);
     }
 
-    public void unblockUser(String userId) {
-        Optional<MongoUserData> userOptional = mongoUserRepository.findById(userId);
 
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found");
-        }
-
-        MongoUserData user = userOptional.get();
-        user.setBannedUntil(null);
-
-        mongoUserRepository.save(user);
-    }
 }
