@@ -34,7 +34,7 @@ public class RequestController {
         mongoRequestsService.updateRequest(requestModel.toModel());
     }
 
-    @PutMapping("update-status")
+    @PutMapping("/update-status")
     public void updateRequestStatus(@RequestBody ChangeRequestStatusDTO dto) {
         mongoRequestsService.updateRequestStatus(dto.getRequestId(), dto.getStatus());
     }

@@ -28,7 +28,7 @@ public class PhotoController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG) // або dynamic: MediaType.valueOf(photo.getContentType())
+                .contentType(MediaType.IMAGE_JPEG)
                 .body(image);
     }
 }
